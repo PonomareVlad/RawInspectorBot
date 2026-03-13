@@ -12,14 +12,16 @@ const safe = bot.errorBoundary(console.error)
 
 const keysToErase = ['text', 'entities', 'caption', 'caption_entities']
 
-function eraseContent(update) {
-    const clone = JSON.parse(JSON.stringify(update))
-    for (const value of Object.values(clone)) {
-        if (value && typeof value === 'object') {
-            for (const key of keysToErase) delete value[key]
-            if (value.message && typeof value.message === 'object') {
-                for (const key of keysToErase) delete value.message[key]
-            }
+function eraseContent(obj) {
+    if (!obj || typeof obj !== 'object') return obj
+    if (Array.isArray(obj)) return obj.map(eraseContent)
+    const clone = { ...obj }
+    if ('message_id' in clone) {
+        for (const key of keysToErase) delete clone[key]
+    }
+    for (const key of Object.keys(clone)) {
+        if (clone[key] && typeof clone[key] === 'object') {
+            clone[key] = eraseContent(clone[key])
         }
     }
     return clone
