@@ -1,7 +1,7 @@
 import { Bot } from 'grammy'
 import { fmt, pre } from '@grammyjs/parse-mode'
 import { toHTML, toMarkdownV2 } from '@telegraf/entity'
-import { replyWithFormattedMessage } from './helpers.js'
+import { replyWithFormattedMessage } from './helpers.mjs'
 
 export const {
     TELEGRAM_BOT_TOKEN: token,
