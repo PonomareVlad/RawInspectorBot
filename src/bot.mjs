@@ -1,4 +1,4 @@
-import { Bot } from 'grammy'
+import { Bot, InputFile } from 'grammy'
 import { fmt, pre } from '@grammyjs/parse-mode'
 import { toHTML, toMarkdownV2 } from '@telegraf/entity'
 
@@ -11,7 +11,7 @@ export const bot = new Bot(token)
 
 const safe = bot.errorBoundary(console.error)
 
-const replyWithFormattedMessage = (ctx, mode, language) => {
+const replyWithFormattedMessage = (ctx, mode) => {
     const target = ctx.msg.reply_to_message
     const text = target?.text ?? target?.caption
 
@@ -23,18 +23,20 @@ const replyWithFormattedMessage = (ctx, mode, language) => {
     const message = { text, entities: [...entities] }
     const formatted =
         mode === 'HTML' ? toHTML(message) : toMarkdownV2(message)
-    const { text: replyText, entities: replyEntities } =
-        fmt`${pre(language)}${formatted}${pre}`
 
-    return ctx.reply(replyText, { entities: replyEntities })
+    const file = new InputFile(
+        new TextEncoder().encode(formatted),
+        `message.${mode === 'HTML' ? 'html' : 'md'}`,
+    )
+    return ctx.replyWithDocument(file)
 }
 
 safe.command('html', ctx =>
-    replyWithFormattedMessage(ctx, 'HTML', 'html'),
+    replyWithFormattedMessage(ctx, 'HTML'),
 )
 
 safe.command('md', ctx =>
-    replyWithFormattedMessage(ctx, 'MarkdownV2', 'markdown'),
+    replyWithFormattedMessage(ctx, 'MarkdownV2'),
 )
 
 safe.on('msg', ctx => {

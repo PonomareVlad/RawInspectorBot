@@ -1,9 +1,7 @@
 # [Telegram Bot](https://core.telegram.org/bots) Template for [Vercel](https://vercel.com)
 
 This template is built on the [grammY](https://grammy.dev), thanks to which it
-supports
-both [Serverless (Node.js)](https://vercel.com/docs/functions/runtimes/node-js)
-and [Edge Runtime](https://vercel.com/docs/functions/runtimes/edge-runtime).
+supports [Serverless (Node.js)](https://vercel.com/docs/functions/runtimes/node-js).
 
 ## How to use
 
@@ -27,8 +25,7 @@ and [connect the repository to your project on Vercel](https://vercel.com/new).
 ### Message formatting commands
 
 Reply to a text message or a media message with a caption using `/html` or
-`/md` to get its entities represented as HTML or MarkdownV2. The output
-is shown as code so the formatting syntax remains visible.
+`/md` to get its entities as an `.html` or `.md` file.
 
 ### Local development
 
