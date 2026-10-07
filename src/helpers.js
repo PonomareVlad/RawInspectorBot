@@ -9,5 +9,5 @@ export const replyWithFormattedMessage = async (extension, method, ctx) => {
         ),
         { reply_parameters: reply_to_message }
     )
-    await ctx.deleteMessage().catch(console.error)
+    await ctx.deleteMessage().catch(console.warn)
 }
