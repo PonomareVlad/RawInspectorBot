@@ -11,7 +11,26 @@ export const bot = new Bot(token)
 
 const safe = bot.errorBoundary(console.error)
 
-const replyWithFormattedMessage = (ctx, mode) => {
+safe.on('msg', async ctx => {
+    let extension
+    let formatter
+
+    switch (true) {
+        case ctx.hasCommand('html'):
+            extension = 'html'
+            formatter = toHTML
+            break
+        case ctx.hasCommand('md'):
+            extension = 'md'
+            formatter = toMarkdownV2
+            break
+        default: {
+            const json = JSON.stringify(ctx.update, null, 2)
+            const { text, entities } = fmt`${pre('json')}${json}${pre}`
+            return ctx.reply(text, { entities })
+        }
+    }
+
     const target = ctx.msg.reply_to_message
     const text = target?.text ?? target?.caption
 
@@ -21,26 +40,14 @@ const replyWithFormattedMessage = (ctx, mode) => {
 
     const entities = target.entities ?? target.caption_entities ?? []
     const message = { text, entities: [...entities] }
-    const formatted =
-        mode === 'HTML' ? toHTML(message) : toMarkdownV2(message)
-
+    const formatted = formatter(message)
     const file = new InputFile(
         new TextEncoder().encode(formatted),
-        `message.${mode === 'HTML' ? 'html' : 'md'}`,
+        `message.${extension}`,
     )
-    return ctx.replyWithDocument(file)
-}
 
-safe.command('html', ctx =>
-    replyWithFormattedMessage(ctx, 'HTML'),
-)
-
-safe.command('md', ctx =>
-    replyWithFormattedMessage(ctx, 'MarkdownV2'),
-)
-
-safe.on('msg', ctx => {
-    const json = JSON.stringify(ctx.update, null, 2)
-    const { text, entities } = fmt`${pre('json')}${json}${pre}`
-    return ctx.reply(text, { entities })
+    await ctx.replyWithDocument(file, {
+        reply_parameters: { message_id: target.message_id },
+    })
+    await ctx.deleteMessage().catch(console.error)
 })
