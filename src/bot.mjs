@@ -31,7 +31,7 @@ safe.command('html', ctx =>
     replyWithFormattedMessage(ctx, 'HTML', 'html'),
 )
 
-safe.command('markdownv2', ctx =>
+safe.command('md', ctx =>
     replyWithFormattedMessage(ctx, 'MarkdownV2', 'markdown'),
 )
 

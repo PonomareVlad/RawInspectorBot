@@ -27,7 +27,7 @@ and [connect the repository to your project on Vercel](https://vercel.com/new).
 ### Message formatting commands
 
 Reply to a text message or a media message with a caption using `/html` or
-`/markdownv2` to get its entities represented as HTML or MarkdownV2. The output
+`/md` to get its entities represented as HTML or MarkdownV2. The output
 is shown as code so the formatting syntax remains visible.
 
 ### Local development
