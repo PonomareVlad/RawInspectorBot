@@ -1,6 +1,7 @@
-import { Bot, InputFile } from 'grammy'
+import { Bot } from 'grammy'
 import { fmt, pre } from '@grammyjs/parse-mode'
 import { toHTML, toMarkdownV2 } from '@telegraf/entity'
+import { replyWithFormattedMessage } from './helpers.js'
 
 export const {
     TELEGRAM_BOT_TOKEN: token,
@@ -19,15 +20,3 @@ safe.on('msg', ctx => {
     const { text, entities } = fmt`${pre('json')}${json}${pre}`
     return ctx.reply(text, { entities })
 })
-
-const replyWithFormattedMessage = async (extension, method, ctx) => {
-    const { reply_to_message } = ctx.msg
-    await ctx.replyWithDocument(
-        new InputFile(
-            new TextEncoder().encode(method(reply_to_message)),
-            `message.${extension}`
-        ),
-        { reply_parameters: reply_to_message }
-    )
-    await ctx.deleteMessage().catch(console.error)
-}
