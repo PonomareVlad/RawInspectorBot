@@ -11,7 +11,7 @@
     },
     "dependencies": {
         "@grammyjs/parse-mode": "^2.2.0",
-        "@telegram.ts/formatters": "^2.1.0",
+        "@telegraf/entity": "^0.7.0",
         "grammy": "^1.17.1"
     }
 }
