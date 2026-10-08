@@ -5,7 +5,7 @@ export const replyWithFormattedMessage = async (extension, method, ctx) => {
     await ctx.replyWithDocument(
         new InputFile(
             new TextEncoder().encode(method(reply_to_message)),
-            `message.${extension}`
+            `${reply_to_message.message_id}.${extension}`
         ),
         { reply_parameters: reply_to_message }
     )
