@@ -1,5 +1,7 @@
 import { Bot } from 'grammy'
 import { fmt, pre } from '@grammyjs/parse-mode'
+import { toHTML, toMarkdownV2 } from '@telegraf/entity'
+import { replyWithFormattedMessage } from './helpers.mjs'
 
 export const {
     TELEGRAM_BOT_TOKEN: token,
@@ -9,6 +11,9 @@ export const {
 export const bot = new Bot(token)
 
 const safe = bot.errorBoundary(console.error)
+
+safe.command('md', replyWithFormattedMessage.bind(null, 'md', toMarkdownV2))
+safe.command('html', replyWithFormattedMessage.bind(null, 'html', toHTML))
 
 safe.on('msg', ctx => {
     const json = JSON.stringify(ctx.update, null, 2)
